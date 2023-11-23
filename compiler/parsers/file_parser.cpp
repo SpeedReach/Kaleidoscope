@@ -3,6 +3,9 @@
 //
 #include "include/file_parser.h"
 #include "include/ast_parser.h"
+#include "top_level.h"
+#include "kale_error.h"
+#include "token.h"
 
 
 ErrorOr<std::unique_ptr<FileAst>> FileParser::Parse(){

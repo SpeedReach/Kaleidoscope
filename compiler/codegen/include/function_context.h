@@ -30,8 +30,8 @@ public:
     ErrorOr<llvm::Function*> Lower();
 
     FileContext& Parent(){return *file_context;}
-    llvm::AllocaInst* GetValue(std::string id){return namedValues[id];}
-    void SetValue(std::string id, llvm::AllocaInst* alloc) {namedValues[id] = alloc;}
+    llvm::AllocaInst* GetValue(const std::string& id){return namedValues[id];}
+    void SetValue(const std::string& id, llvm::AllocaInst* alloc) {namedValues[id] = alloc;}
     llvm::IRBuilder<>& GetBuilder() {return builder;}
 private:
     std::map<std::string, llvm::AllocaInst*> namedValues;
@@ -42,7 +42,7 @@ private:
 
     const std::unique_ptr<CallableImplementation>& function;
     // The generated IR after calling Lower()
-    llvm::Function* generatedFn;
+    llvm::Function* generatedFn = nullptr;
 
     llvm::IRBuilder<> builder;
 

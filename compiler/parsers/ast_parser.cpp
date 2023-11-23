@@ -3,8 +3,12 @@
 //
 
 
-#include "include/ast_parser.h"
+
 #include "ast_node.h"
+#include "ast.h"
+#include "token.h"
+#include "kale_error.h"
+#include "include/ast_parser.h"
 #include <memory>
 
 

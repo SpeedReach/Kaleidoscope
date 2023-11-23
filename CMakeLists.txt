@@ -40,6 +40,15 @@ add_subdirectory(compiler/parsers)
 
 add_subdirectory(compiler/codegen)
 
+target_link_libraries(
+        kaleidoscope
+        common
+        lexer
+        ast
+        parsers
+        codegen
+)
+
 # tests
 add_executable(
         kaleidoscope_test

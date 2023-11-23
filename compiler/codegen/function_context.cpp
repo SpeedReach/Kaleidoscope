@@ -4,9 +4,9 @@
 
 #include <llvm/IR/Constants.h>
 #include <llvm/IR/Verifier.h>
-#include "include/function_context.h"
-#include "include/file_context.h"
 #include "include/handle.h"
+#include "ast.h"
+#include "top_level.h"
 
 ErrorOr<llvm::Function *> FunctionContext::Lower() {
     if(generatedFn){
@@ -52,6 +52,7 @@ ErrorOr<llvm::Function *> FunctionContext::Lower() {
                 if(!v.ok()){
                     return v.error();
                 }
+                break;
             }
             case AstType::assign: {
                 auto assign = dynamic_cast<AssignmentAst*>(ast.get());
@@ -64,6 +65,7 @@ ErrorOr<llvm::Function *> FunctionContext::Lower() {
                     return v.error();
                 }
                 builder.CreateStore(*v,alloc);
+                break;
             }
             case AstType::var: {
                 auto var = dynamic_cast<VariableDeclareAst*>(ast.get());
@@ -74,6 +76,7 @@ ErrorOr<llvm::Function *> FunctionContext::Lower() {
                 auto alloc = builder.CreateAlloca(llvm::Type::getDoubleTy(file_context->llvm_context()), nullptr,var->identifier);
                 namedValues[var->identifier] = alloc;
                 builder.CreateStore(*v, alloc);
+                break;
             }
         }
     }
@@ -82,7 +85,7 @@ ErrorOr<llvm::Function *> FunctionContext::Lower() {
         builder.CreateRetVoid();
     }
     auto verified = llvm::verifyFunction(*generatedFn,&llvm::errs());
-    if(!verified){
+    if(verified){
         return std::string ("Failed lowering function");
     }
     return generatedFn;

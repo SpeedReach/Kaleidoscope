@@ -31,11 +31,11 @@ static ErrorOr<llvm::Value*> HandleBinaryExpr(FunctionContext& functionContext,B
     }
     switch (expr.op) {
         case BinOperator::add:
-            return functionContext.GetBuilder().CreateAdd(*L,*R,"addtmp");
+            return functionContext.GetBuilder().CreateFAdd(*L,*R,"addtmp");
         case BinOperator::subtract:
-            return functionContext.GetBuilder().CreateSub(*L,*R,"subtmp");
+            return functionContext.GetBuilder().CreateFSub(*L,*R,"subtmp");
         case BinOperator::multiply:
-            return functionContext.GetBuilder().CreateMul(*L,*R,"multmp");
+            return functionContext.GetBuilder().CreateFMul(*L,*R,"multmp");
         case BinOperator::divide:
             return functionContext.GetBuilder().CreateSDiv(*L,*R,"divtmp");
         case BinOperator::greater:
