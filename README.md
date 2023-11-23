@@ -4,11 +4,11 @@ made for learning purpose.
 Build: Uses vcpkg as package manager.
 
 
-```
-let a = 1.0;
+## Lexer
+For parsing input into tokens.
 
-fn test(){
-  a = 10;
-}
-```
+## Parser
+For parsing tokens into AST and further into FileAst.
 
+## codegen
+Generates ast into llvm ir using recursive approach.

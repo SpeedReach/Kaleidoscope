@@ -50,3 +50,58 @@ TEST(LexerTest, BasicAssertions) {
     tok = cursor.AdvanceToken();
     EXPECT_TRUE(std::holds_alternative<Identifier>(tok.kind));
 }
+
+TEST(LexerTest, Test2){
+    std::string str = "fn aw(a,b,c) { a=b+c; return a + b + c; }";
+    std::string_view src(str);
+    Cursor cursor(src);
+    Token tok;
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"fn");
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"aw");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<OpenParen>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"a");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<Comma>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"b");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<Comma>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"c");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<CloseParen>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<OpenBracket>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"a");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<Assign>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"b");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<Arithmetic>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"c");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<Semicolon>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"return");
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"a");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<Arithmetic>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"b");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<Arithmetic>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_EQ(std::get<Identifier>(tok.kind).name,"c");
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<Semicolon>(tok.kind));
+    tok = cursor.AdvanceToken();
+    EXPECT_TRUE(std::holds_alternative<CloseBracket>(tok.kind));
+}

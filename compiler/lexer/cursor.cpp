@@ -5,25 +5,19 @@
 
 
 char Cursor::First() const {
-    if( currentIndex >= chars.length()){
+    if(index >= chars.length()){
         return EOF;
     }
-    return chars.at(currentIndex);
+    return chars.at(index);
 }
 
-char Cursor::Second() const {
-    if(currentIndex + 1 >= chars.length()){
-        return EOF;
-    }
-    return chars.at(currentIndex+1);
-}
 
 char Cursor::Bump() {
-    if( currentIndex >= chars.length()){
+    if(index >= chars.length()){
         return EOF;
     }
-    char current = chars.at(currentIndex);
-    currentIndex ++;
+    char current = chars.at(index);
+    index ++;
     return current;
 }
 
@@ -44,6 +38,12 @@ Token Cursor::AdvanceToken() {
         }
         case ';':{
             return Token{Semicolon{},1};
+        }
+        case '{': {
+            return Token{OpenBracket{}, 1};
+        }
+        case '}': {
+            return Token{CloseBracket{}, 1};
         }
         // #comment
         case '#': {

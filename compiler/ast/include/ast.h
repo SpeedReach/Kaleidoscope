@@ -1,83 +1,71 @@
 //
-// Created by gomil on 2023/11/12.
+// Created by gomil on 2023/11/20.
 //
 
-#ifndef KALEIDOSCOPE_AST_H
-#define KALEIDOSCOPE_AST_H
+#ifndef KALEIDOSCOPE_AST_TREE_H
+#define KALEIDOSCOPE_AST_TREE_H
 
-#include <string>
-#include <utility>
-#include <memory>
-#include <vector>
-#include <map>
-#include <istream>
-#include "bin_op.h"
+#include "ast_node.h"
 
-
-enum class AstNodeType{
-    number,
-    functionCall,
-    binaryExpr,
-    variableReference,
-    variableDeclaration,
+enum AstType{
+    ret,
+    var,
+    expr,
+    assign
 };
 
-class AstNode{
+class Ast{
 public:
-    virtual ~AstNode() = default;
-    virtual AstNodeType getType() const noexcept = 0;
+    virtual ~Ast() = default;
+    virtual AstType getType() const noexcept = 0;
 };
 
-class AstTree{
+class ReturnAst:public Ast{
 public:
-    explicit AstTree(std::unique_ptr<AstNode> root): root(std::move(root)){
+    const std::unique_ptr<AstNode> expr;
+    explicit ReturnAst(std::unique_ptr<AstNode> expr): expr(std::move(expr)){
     }
-
-    std::unique_ptr<AstNode> root;
+    AstType getType() const noexcept override{
+        return AstType::ret;
+    }
 };
 
-class NumberNode: public AstNode{
-    const double value;
+class VariableDeclareAst: public Ast{
 public:
-    explicit NumberNode(double value): value(value){}
-    AstNodeType getType() const noexcept override{
-        return AstNodeType::number;
+    const std::string identifier;
+    const std::unique_ptr<AstNode> expr;
+    explicit VariableDeclareAst(std::string identifier,std::unique_ptr<AstNode> expr): identifier(std::move(identifier)),
+                                                                                        expr(std::move(expr)){
+    }
+
+    AstType getType() const noexcept override{
+        return AstType::var;
     }
 };
 
-//calls a function
-class FunctionCallNode: public AstNode{
-    const std::string callee;
-    const std::vector<std::unique_ptr<AstNode>> args;
+class ExpressionAst: public Ast{
 public:
-    FunctionCallNode(std::string callee,std::vector<std::unique_ptr<AstNode>> args): args(std::move(args)), callee(std::move(callee)){
+    const std::unique_ptr<AstNode> expr;
+    explicit ExpressionAst(std::unique_ptr<AstNode> expr): expr(std::move(expr)){
     }
-    AstNodeType getType() const noexcept override {
-        return AstNodeType::functionCall;
+    AstType getType() const noexcept override{
+        return AstType::expr;
     }
 };
 
-class BinaryExprNode: public AstNode {
-    const BinOperator op;
-    const std::unique_ptr<AstNode> lhs;
-    const std::unique_ptr<AstNode> rhs;
+class AssignmentAst: public Ast{
 public:
-    explicit BinaryExprNode(BinOperator op, std::unique_ptr<AstNode> lhs, std::unique_ptr<AstNode> rhs):
-    op(op), lhs(std::move(lhs)), rhs(std::move(rhs)){}
-    AstNodeType getType() const noexcept override{
-        return AstNodeType::binaryExpr;
+    const std::unique_ptr<VariableReferenceNode> assignee;
+
+    const std::unique_ptr<AstNode> expr;
+
+    explicit AssignmentAst(std::unique_ptr<VariableReferenceNode>  assignee,std::unique_ptr<AstNode> expr): assignee(std::move(assignee)),
+                                                                                   expr(std::move(expr)){
     }
+    AstType getType() const noexcept override{
+        return AstType::assign;
+    }
+
 };
 
-class VariableReferenceNode: public AstNode{
-    const std::string id;
-public:
-    explicit VariableReferenceNode(std::string  id): id(std::move(id)){
-    }
-    AstNodeType getType() const noexcept override {
-        return AstNodeType::variableReference;
-    }
-};
-
-
-#endif //KALEIDOSCOPE_AST_H
+#endif //KALEIDOSCOPE_AST_TREE_H
