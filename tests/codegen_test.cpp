@@ -4,6 +4,7 @@
 #include "function_context.h"
 #include "handle.h"
 
+
 TEST(LowerFile, LowerSingleFunction){
     std::string code = "fn aw(a,b,c) { a=b+c; return a + b + c; }";
     std::string_view view(code);
@@ -17,7 +18,6 @@ TEST(LowerFile, LowerSingleFunction){
     EXPECT_TRUE(result.ok()) << result.error();
     functionContext.Parent().llvm_module().print(llvm::errs(), nullptr);
 }
-
 
 
 TEST(LowerFile, UnitTest){

@@ -17,7 +17,7 @@ enum AstType{
 class Ast{
 public:
     virtual ~Ast() = default;
-    virtual AstType getType() const noexcept = 0;
+    virtual AstType GetType() const noexcept = 0;
 };
 
 class ReturnAst:public Ast{
@@ -25,7 +25,7 @@ public:
     const std::unique_ptr<AstNode> expr;
     explicit ReturnAst(std::unique_ptr<AstNode> expr): expr(std::move(expr)){
     }
-    AstType getType() const noexcept override{
+    AstType GetType() const noexcept override{
         return AstType::ret;
     }
 };
@@ -38,7 +38,7 @@ public:
                                                                                         expr(std::move(expr)){
     }
 
-    AstType getType() const noexcept override{
+    AstType GetType() const noexcept override{
         return AstType::var;
     }
 };
@@ -48,7 +48,7 @@ public:
     const std::unique_ptr<AstNode> expr;
     explicit ExpressionAst(std::unique_ptr<AstNode> expr): expr(std::move(expr)){
     }
-    AstType getType() const noexcept override{
+    AstType GetType() const noexcept override{
         return AstType::expr;
     }
 };
@@ -62,7 +62,7 @@ public:
     explicit AssignmentAst(std::unique_ptr<VariableReferenceNode>  assignee,std::unique_ptr<AstNode> expr): assignee(std::move(assignee)),
                                                                                    expr(std::move(expr)){
     }
-    AstType getType() const noexcept override{
+    AstType GetType() const noexcept override{
         return AstType::assign;
     }
 

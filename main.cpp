@@ -14,7 +14,6 @@ int main() {
     const std::unique_ptr<CallableImplementation>& fRef = (*parsedFile)->functionImpl[0];
     FunctionContext functionContext(&context,fRef);
     auto result = functionContext.Lower();
-    std::cout << result.error();
     functionContext.Parent().llvm_module().print(llvm::errs(), nullptr);
     return 0;
 }

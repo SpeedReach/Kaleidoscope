@@ -20,7 +20,6 @@ public:
             name(std::move(name)), args(std::move(args)){
     }
 
-    const std::string& getIdentifier() const noexcept;
 };
 
 class Block {

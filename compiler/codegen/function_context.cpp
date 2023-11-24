@@ -35,7 +35,7 @@ ErrorOr<llvm::Function *> FunctionContext::Lower() {
 
     bool hasReturn = false;
     for (auto &ast : function->body->trees ){
-        switch (ast->getType()) {
+        switch (ast->GetType()) {
             case AstType::ret: {
                 auto ret = dynamic_cast<ReturnAst*>(ast.get());
                 auto v = HandleAstNode(*this,*ret->expr);

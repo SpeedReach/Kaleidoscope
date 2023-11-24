@@ -30,8 +30,8 @@ private:
     void Bump();
 
     /// fn a(a,b)
-    ErrorOr<std::unique_ptr<CallableDeclaration>> parseProtoType();
-    ErrorOr<std::unique_ptr<Block>> parseBody();
+    ErrorOr<std::unique_ptr<CallableDeclaration>> ParseProtoType();
+    ErrorOr<std::unique_ptr<Block>> ParseBody();
 
 };
 

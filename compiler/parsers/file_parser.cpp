@@ -13,12 +13,12 @@ ErrorOr<std::unique_ptr<FileAst>> FileParser::Parse(){
     std::vector<std::unique_ptr<CallableImplementation>> functionImpl;
     while (!std::holds_alternative<EOFTok>(GetCurrentToken().kind)){
         std::cout<<"22222222222222";
-        auto prototype = parseProtoType();
+        auto prototype = ParseProtoType();
         if(!prototype.ok()){
             return prototype.error();
         }
         if(std::get_if<OpenBracket>(&GetCurrentToken().kind)){
-            auto block = parseBody();
+            auto block = ParseBody();
             if(!block.ok()){
                 return block.error();
             }
@@ -32,7 +32,7 @@ ErrorOr<std::unique_ptr<FileAst>> FileParser::Parse(){
     return std::make_unique<FileAst>(std::move(funcPrototype), std::move(functionImpl));
 }
 /// fn a(a,b)
-ErrorOr<std::unique_ptr<CallableDeclaration>> FileParser::parseProtoType(){
+ErrorOr<std::unique_ptr<CallableDeclaration>> FileParser::ParseProtoType(){
     auto fn = std::get_if<Identifier>(&GetCurrentToken().kind);
     if(!fn || fn->name != "fn"){
         return std::string ("functions should starts with fn");
@@ -73,7 +73,7 @@ void FileParser::Bump() {
     reader.Forward();
 }
 
-ErrorOr<std::unique_ptr<Block>> FileParser::parseBody() {
+ErrorOr<std::unique_ptr<Block>> FileParser::ParseBody() {
     if(!std::get_if<OpenBracket>(&GetCurrentToken().kind)){
         return std::string ("expecting a open bracket");
     }
